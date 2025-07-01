@@ -2,18 +2,18 @@ import bcrypt from "bcryptjs";
 import jtw from "jsonwebtoken";
 import User from "../models/User.js";
 
-export async function registerUser({ name, email, password }) {
+export async function registerUser({ username, email, password }) {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) throw new Error("User already exists");
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ name, email, password: hashedPassword });
+    const newUser = await User.create({ username, email, password: hashedPassword });
 
     return { id: newUser.id, name: newUser.name, email: newUser.email };
 }
 
 export async function logInUser({ email, password }){
-    const user = await User.findOne({where: { email }});
+    const user = await User.findOne({ email });
     if(!user) throw new Error("User not found");
 
     const passwordMatch = await bcrypt.compare(password, user.password);
