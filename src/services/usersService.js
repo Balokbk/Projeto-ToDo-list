@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs";
-import jtw from "jsonwebtoken";
-import User from "../models/User.js";
+import bcrypt from 'bcryptjs';
+import jtw from 'jsonwebtoken';
+import User from '../models/User.js';
 
 export async function registerUser({ username, email, password }) {
     const existingUser = await User.findOne({ where: { email } });
