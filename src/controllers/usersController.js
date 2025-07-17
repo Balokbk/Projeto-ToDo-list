@@ -28,3 +28,13 @@ export async function login(req, res){
         res.status(400).json({ error: error.message });
     }
 }
+
+export async function deleteAccount(req, res){
+    try{
+        const userId = req.userId
+        const result = await deleteUserAndTodos(userId);
+        res.status(200).json(result);
+    }catch(error){
+        res.status(400).json({ error: error.message})
+    }
+}

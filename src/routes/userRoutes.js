@@ -1,6 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { register, login } from '../controllers/usersController.js';
+import { authMiddleware } from '../middlewares/authMiddleware.js';
+import { register, login, deleteAccount } from '../controllers/usersController.js';
 
 const userRouter = express.Router();
 
@@ -22,5 +23,8 @@ userRouter.post("/login",
     ],
     login
 );
+
+// Rota para deletar conta de usuário
+userRouter.delete("/delete/me", authMiddleware,deleteAccount);
 
 export default userRouter;
