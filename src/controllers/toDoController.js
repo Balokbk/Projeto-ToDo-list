@@ -20,14 +20,16 @@ export async function createToDo(req, res){
 export async function getUserToDos(req, res){
     try{
         const userId = req.userId;
-        const toDos = await toDoService.getUserToDos(userId);
+        const page = req.query.page
+        const limit = req.query.limit
+        const toDos = await toDoService.getUserToDos(userId, page, limit);
         res.status(200).json(toDos);
     } catch(error){
         res.status(400).json({ error: error.message });
     }
 }
 
-export async function searchByTitle(req, res) {
+export async function searchToDosByTitle(req, res) {
     try{
         const userId = req.userId;
         const { title } = req.query;
@@ -72,15 +74,15 @@ export async function deleteToDo(req, res){
     }
 }
 
-export async function markAsCompleted(req, res){
+export async function toggleCompleted(req, res){
     try{
         const { id } = req.params;
         const userId = req.userId;
-        const updatedToDo = await toDoService.updateToDo(id, { completed: true, userId });
-        if(!updatedToDo){
+        const todo = await toDoService.toggleCompleted(id, userId)
+        if(!todo){
             return res.status(404).json({ error: 'Tarefa não encontrada ou não pertence ao usuário' });
         }
-        res.status(200).json(updatedToDo);
+        res.status(200).json(todo);
     }catch(error){
         res.status(400).json({ error: error.message });
     }
